@@ -5,18 +5,21 @@ using UnityEngine.UI;
 
 public class EnemyFunctionality : MonoBehaviour
 {
+    private CurvedHealthBar curvedHealthBar;
+
     // Movement
-    public float speed = 10f;
+    public float speed;
 
     // Health
-    [SerializeField] private float maxHealth = 100f, currentHealth = 100f;
-    private FloatingHealthBar healthBar;
+    [SerializeField] private float maxHealth, currentHealth;
 
     // Moving from point to point
-    private Transform target;
+    public Transform wayPointTarget;
     private int wavepointIndex = 0;
-    public float rotationSpeed = 720;
+    private float rotationSpeed = 0.05f;
     private Animator animator;
+    private Quaternion rotGoal;
+    private Vector3 direction;
 
     private void Awake()
     {
@@ -25,63 +28,63 @@ public class EnemyFunctionality : MonoBehaviour
 
     private void Start()
     {
-        target = Waypoints.points[0];
-        changeLookDirection();
+        wayPointTarget = Waypoints.points[0];
         animator = this.GetComponent<Animator>();
-        healthBar = this.GetComponentInChildren<FloatingHealthBar>();
-        healthBar.UpdateHealthBar(currentHealth, maxHealth);
     }
 
     private void Update()
     {
-        Vector3 enemyTravelDirection = (target.position - transform.position).normalized;
-        transform.Translate(enemyTravelDirection * speed * Time.deltaTime, Space.World);
+        GetMoving();
+        ChangeLookDirection();
 
-        if (Vector3.Distance(transform.position, target.position) <= 0.5f)
+        if (Vector3.Distance(transform.position, wayPointTarget.position) <= 0.5f)
         {
-            if (enemyTravelDirection != Vector3.zero)
-            {
-                Quaternion enemyRotation = Quaternion.LookRotation(transform.position, Vector3.up);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, enemyRotation, rotationSpeed * Time.deltaTime);
-            }
             GetNextWayPoint();
         }
     }
-
-    // move to waypoint
+    public void GetMoving()
+    {
+        Vector3 enemyTravelDirection = (wayPointTarget.position - transform.position).normalized;
+        transform.Translate(enemyTravelDirection * speed * Time.deltaTime, Space.World);
+    }
     void GetNextWayPoint()
     {
         if (wavepointIndex >= Waypoints.points.Length - 1)
         {
-            Dies();
+            LoseLife();
             // implement player life or chances lost because gameobject has reached the end without dying
             //numberOfEnemies--;
             return;
         }
         wavepointIndex++;
-        changeLookDirection();
+        wayPointTarget = Waypoints.points[wavepointIndex];
     }
+    void ChangeLookDirection()
+    {                      
+        direction = (wayPointTarget.position - transform.position).normalized;
 
-    void changeLookDirection()
-    {
-        target = Waypoints.points[wavepointIndex];
-        transform.LookAt(target.position);
-        target.Rotate(new Vector3(0, 0, 0));
+        rotGoal = Quaternion.LookRotation(direction);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotGoal, rotationSpeed);
     }
-
-    public void TakeDamage(float damageAmount)
-    {
-        currentHealth -= damageAmount;
-        healthBar.UpdateHealthBar(currentHealth, maxHealth);
-        if (currentHealth <= 0)
-        {
-            Dies();
-        }
-    }
-
-    void Dies()
+    void Die()
     {
         animator.SetBool("isDead", true);
         Destroy(gameObject);
+    }
+    public void TakeDamage(float damageAmount)
+    {
+        currentHealth -= damageAmount;
+        curvedHealthBar = GetComponentInChildren<CurvedHealthBar>();
+        curvedHealthBar.FillState = currentHealth/maxHealth;
+        if (currentHealth <= 0)
+        {
+            Die();
+        }
+    }
+    public void LoseLife()
+    {
+
+        Die();
     }
 }

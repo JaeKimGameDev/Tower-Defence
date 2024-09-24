@@ -2,23 +2,46 @@ using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
-    public Transform target;
+    private Transform target;
+    private Quaternion rotGoal;
+    private Vector3 direction;
+    private float rotationSpeed = 0.75f;
 
     [Header("Attributes")]
-    public float range = 15f;
-    public float fireRate = 1f;
-    private float fireCountdown = 0f;
+    public float range;
+    public float fireRate;
+    private float fireCountdown;
 
-    [Header("Unity Setup Fields")]
-    public string enemyTag = "Enemy";
-
-    public Transform attackerPOV;
-    public float turnSpeed = 10f;
+    [SerializeField]
+    private float gunDamage;
 
     public GameObject bulletPrefab;
     public Transform firePoint;
+    public GameObject frontOfEnemy;
+    public float enemyDistance;
 
-    public float enemydistance;
+    void Start()
+    {
+        InvokeRepeating("UpdateTarget", 0f, 0.5f);
+    }
+    void UpdateTarget()
+    {
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        frontOfEnemy = null;
+        foreach (GameObject enemy in enemies)
+        {
+            enemyDistance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (enemyDistance <= range)
+            {
+                frontOfEnemy = enemy;
+                break;
+            }
+        }
+        if (frontOfEnemy != null)
+        {
+            target = frontOfEnemy.transform;
+        }
+    }
 
     void FixedUpdate()
     {
@@ -26,12 +49,7 @@ public class Turret : MonoBehaviour
         {
             return;
         }
-
-        // target lock-on
-        Vector3 dir = target.position - transform.position;
-        Quaternion lookRotation = Quaternion.LookRotation(dir);
-        Vector3 rotation = Quaternion.Lerp(attackerPOV.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
-        attackerPOV.rotation = Quaternion.Euler(0f, rotation.y, 0f);
+        ChangeLookDirection();
 
         if (fireCountdown <= 0f)
         {
@@ -48,13 +66,19 @@ public class Turret : MonoBehaviour
 
         if (bullet != null)
         {
-            bullet.Seek(target);
+            bullet.Seek(target, gunDamage);
         }
     }
 
-    public void OnDrawGizmosSelected()
+    void ChangeLookDirection()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, range);
+        direction = (target.position - transform.position).normalized;
+        rotGoal = Quaternion.LookRotation(direction);
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotGoal, rotationSpeed);
+    }
+
+    private void Awake()
+    {
+        
     }
 }

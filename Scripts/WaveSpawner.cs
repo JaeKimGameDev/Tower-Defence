@@ -6,47 +6,40 @@ using UnityEngine.UI;
 
 public class WaveSpawner : MonoBehaviour
 {
-    // tuple of enemy waves and level of tuple to spawn
-    public List<GameObject> enemyLevels = new List<GameObject>();
-    public int currentEnemyLevel=0;
-
+    [Header("Enemies Info")]
+    public List<GameObject> enemyWaves = new List<GameObject>();
     public List<GameObject> enemies = new List<GameObject>();
-
-    // where the enemy spawns
+    public int waveLevel=0;
     public Transform spawnPoint;
+    private float timeBetweenEnemies = 2.5f;
+    private float timeBetweenWaves = 75f;
+    private float countdown = 15f;
+    [SerializeField]
+    private int spawnNumOfEnemies = 30;
+    private WaveSpawner waveSpawner;
 
-    // timing for when enemies/waves spawn
-    public float spawnTimeBetweenEnemies = 0.5f;
-    public float timeBetweenWaves = 75f;
-    public float countdown = 15f;
-
-    // number of enemies that will spawn
-    public int spawnNumOfEnemies = 30;
-
-    // used to display on canvas/player the countdown for next wave
     public TextMeshProUGUI waveCountdownText;
-
     public Button forceSpawn;
-
-    public bool waveCompleted = true;
-    public bool levelCompleted = false;
 
     void Update()
     {
-        if (countdown <= 0f && currentEnemyLevel < enemyLevels.Count)
+        if (countdown <= 0f)
         {
-            forceSpawnWave();
+            StartWave();
+            countdown = timeBetweenWaves;
         }
-        else if (waveCompleted == true)
+        else if (enemies.Count == 0)
         {
             countdown -= Time.deltaTime;
             waveCountdownText.text = "Next Wave: " + countdown.ToString("0");
         }
-        //if (currentEnemyLevel >= enemyLevels.Count)
-        //{
-        //    levelCompleted = true;
-        //    Debug.Log("level is done");
-        //}
+    }
+
+    public void StartWave()
+    {
+        forceSpawn.interactable = false;
+        countdown = timeBetweenWaves;
+        StartCoroutine(SpawnWave());
     }
 
     IEnumerator SpawnWave()
@@ -54,27 +47,15 @@ public class WaveSpawner : MonoBehaviour
         for (int i=0; i<spawnNumOfEnemies; i++)
         {
             SpawnEnemy();
-            yield return new WaitForSeconds(spawnTimeBetweenEnemies);
+            yield return new WaitForSeconds(timeBetweenEnemies);
         }
         forceSpawn.interactable = true;
-        waveCompleted = true;
         countdown = timeBetweenWaves;
-        currentEnemyLevel++;
+        waveLevel++;
     }
 
     void SpawnEnemy()
     {
-        enemies.Add(Instantiate(enemyLevels[currentEnemyLevel], spawnPoint.position, spawnPoint.rotation));
-    }
-
-    public void forceSpawnWave()
-    {
-        if (currentEnemyLevel < enemyLevels.Count)
-        {
-            forceSpawn.interactable = false;
-            waveCompleted = false;
-            countdown = timeBetweenWaves;
-            StartCoroutine(SpawnWave());
-        }
+        enemies.Add(Instantiate(enemyWaves[waveLevel], spawnPoint.position, spawnPoint.rotation));
     }
 }
