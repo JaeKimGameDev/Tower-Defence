@@ -21,6 +21,8 @@ public class EnemyFunctionality : MonoBehaviour
     private Quaternion rotGoal;
     private Vector3 direction;
 
+    public PlayerAttributes playerAttributes;
+
     private void Awake()
     {
         maxHealth = currentHealth;
@@ -51,7 +53,8 @@ public class EnemyFunctionality : MonoBehaviour
     {
         if (wavepointIndex >= Waypoints.points.Length - 1)
         {
-            LoseLife();
+            playerAttributes.PlayerLifeLost();
+            Die();
             // implement player life or chances lost because gameobject has reached the end without dying
             //numberOfEnemies--;
             return;
@@ -81,10 +84,5 @@ public class EnemyFunctionality : MonoBehaviour
         {
             Die();
         }
-    }
-    public void LoseLife()
-    {
-
-        Die();
     }
 }

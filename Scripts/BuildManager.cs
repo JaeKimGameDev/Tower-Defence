@@ -1,18 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildManager : MonoBehaviour
 {
     public static BuildManager instance;
-    //public GameObject orangeDefenderPrefab;
-    //public GameObject yellowDefenderPrefab;
-    //public GameObject redDefenderPrefab;
-    //private GameObject randomDefender;
-    //public GameObject defenderToBuild;
     
-    public List<GameObject> allDefenders = new List<GameObject>();
-    public List<GameObject> spawnDefenders;
+    public List<GameObject> allNormalDefenders = new List<GameObject>();
+    public List<GameObject> allHeroDefenders = new List<GameObject>();
+    private GameObject spawnDefender;
+    public bool buildHero;
+
+    public PlayerAttributes playerAttributes;
+    public TextMeshProUGUI heroButtonText;
 
     void Awake()
     {
@@ -24,20 +28,73 @@ public class BuildManager : MonoBehaviour
         instance = this;
     }
     
-    public List<GameObject> GetDefenderToBuild()
+    public GameObject GetNormalDefenderToBuild()
     {
-        spawnDefenders = new List<GameObject>();
-        for (int i = 0; i < 4; i++)
+        if (playerAttributes.playerResource >= 1)
         {
-            int defender = Random.Range(0, allDefenders.Count);
-            spawnDefenders.Add(allDefenders[defender]);
+            playerAttributes.DecrementPlayerResource(1);
+            int defender = Random.Range(0, allNormalDefenders.Count);
+            spawnDefender = allNormalDefenders[defender];
+
+            return spawnDefender;
         }
-
-        return spawnDefenders;
+        else
+        {
+            Debug.Log("you require more resources");
+            return null;
+        }
     }
-    //public GameObject GetHeroToBuild()
-    //{
 
-    //    return randomDefender;
-    //}
+    public GameObject GetHeroDefenderToBuild()
+    {
+        if (playerAttributes.playerResource >= 1)
+        {
+            playerAttributes.DecrementPlayerResource(1);
+            int defender = Random.Range(0, allHeroDefenders.Count);
+            spawnDefender = allHeroDefenders[defender];
+            DisableHero();
+            return spawnDefender;
+        }
+        else
+        {
+            Debug.Log("you require more resources");
+            return null;
+        }
+    }
+
+    public bool BuildID()
+    {
+        if (buildHero == true)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void EnableHero()
+    {
+        if (playerAttributes.playerResource >= 1 & buildHero == false)
+        {
+            playerAttributes.DecrementPlayerResource(1);
+            buildHero = true;
+            heroButtonText.GetComponent<TextMeshProUGUI>().color = new Color32(60, 110, 34, 255);
+        }
+        else if (buildHero == true)
+        {
+            Debug.Log("you already enabled Hero to be built next");
+        }
+        else
+        {
+            Debug.Log("you require more resources");
+        }
+    }
+
+    public void DisableHero()
+    {
+        heroButtonText.GetComponent<TextMeshProUGUI>().color = new Color32(107, 3, 73, 255);
+        buildHero = false;
+    }
 }

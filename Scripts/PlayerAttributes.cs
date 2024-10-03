@@ -1,35 +1,35 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerAttributes : MonoBehaviour
 {
     public TextMeshProUGUI playerResourceText;
     public TextMeshProUGUI playerLifeText;
-    public int playerResource = 3;
+    public int playerResource = 6;
     public int playerLife = 25;
 
     void Start()
     {
-        playerResourceText.text = "Resources: " + playerResource.ToString();
-        playerLifeText.text = "Life: " + playerLife.ToString();
+        playerResourceText.text = playerResource.ToString();
+        playerLifeText.text = playerLife.ToString();
     }
 
-    public void incrementPlayerResource(int resourceAmount)
+    public void IncrementPlayerResource(int resourceAmount)
     {
         playerResource += resourceAmount;
-        playerResourceText.text = "Resources:" + playerResource.ToString();
+        playerResourceText.text = playerResource.ToString();
     }
 
-    public void decrementPlayerResource(int resourceAmount)
+    public void DecrementPlayerResource(int resourceAmount)
     {
         playerResource -= resourceAmount;
-        playerResourceText.text = "Resources:" + playerResource.ToString();
+        playerResourceText.text = playerResource.ToString();
     }
 
-    public void playerLifeLost()
+    public void PlayerLifeLost()
     {
         playerLife--;
-        playerLifeText.text = "Life: " + playerLife.ToString();
+        playerLifeText.text = playerLife.ToString();
     }
-    
 }

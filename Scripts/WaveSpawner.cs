@@ -20,6 +20,7 @@ public class WaveSpawner : MonoBehaviour
 
     public TextMeshProUGUI waveCountdownText;
     public Button forceSpawn;
+    public TextMeshProUGUI forceSpawnText;
 
     void Update()
     {
@@ -38,6 +39,7 @@ public class WaveSpawner : MonoBehaviour
     public void StartWave()
     {
         forceSpawn.interactable = false;
+        forceSpawnText.GetComponent<TextMeshProUGUI>().color = new Color32(50, 50, 50, 255);
         countdown = timeBetweenWaves;
         StartCoroutine(SpawnWave());
     }
@@ -50,6 +52,7 @@ public class WaveSpawner : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenEnemies);
         }
         forceSpawn.interactable = true;
+        forceSpawnText.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
         countdown = timeBetweenWaves;
         waveLevel++;
     }

@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Node : MonoBehaviour
 {
     public Vector3 positionOffset;
+    private GameObject defenderToBuild;
     private GameObject defender;
-    private List<GameObject> defenders;
+    public BuildManager buildManager;
+    public Material defaultMaterial;
+    public Material greenMaterial;
+    public Material redMaterial;
 
     void OnMouseDown()
     {
@@ -16,11 +21,30 @@ public class Node : MonoBehaviour
             // or play an audio saying "I can't build there"
             return;
         }
-        List<GameObject> defenderToBuild = BuildManager.instance.GetDefenderToBuild();
-        for (int i = 0; i < defenderToBuild.Count; i++) 
+        buildManager = buildManager.GetComponent<BuildManager>();
+        if (buildManager.BuildID() == true)
         {
-            defender = (GameObject)Instantiate(defenderToBuild[i], transform.position + positionOffset, transform.rotation);
+            defenderToBuild = BuildManager.instance.GetHeroDefenderToBuild();
         }
-        
+        else
+        {
+            defenderToBuild = BuildManager.instance.GetNormalDefenderToBuild();
+        }
+        defender = (GameObject)Instantiate(defenderToBuild, transform.position + positionOffset, transform.rotation);        
+    }
+    void OnMouseEnter()
+    {
+        if (defender == null)
+        {
+            GetComponent<MeshRenderer>().material = greenMaterial;
+        }
+        else
+        {
+            GetComponent<MeshRenderer>().material = redMaterial;
+        }
+    }
+    private void OnMouseExit()
+    {
+        GetComponent<MeshRenderer>().material = defaultMaterial;
     }
 }

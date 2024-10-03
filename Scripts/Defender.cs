@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.InputSystem.OnScreen.OnScreenStick;
 
 public class Defender : MonoBehaviour
 {
@@ -20,8 +21,14 @@ public class Defender : MonoBehaviour
     public GameObject frontOfEnemy;
     public float enemyDistance;
 
+    private Animator animator;
+    public GameObject muzzleFlash;
+    private ParticleSystem muzzleParticleSystem;
+
     void Start()
     {
+        muzzleParticleSystem = muzzleFlash.GetComponent<ParticleSystem>();
+        animator = GetComponent<Animator>();
         InvokeRepeating("UpdateTarget", 0f, 0.5f);
     }
     void UpdateTarget()
@@ -41,14 +48,19 @@ public class Defender : MonoBehaviour
         {
             target = frontOfEnemy.transform;
         }
+        else
+        {
+            animator.SetTrigger("Idle");
+        }
     }
 
     void FixedUpdate()
-    {
+    {        
         if (target == null)
         {
             return;
         }
+        animator.SetTrigger("ShootIdle");
         ChangeLookDirection();
 
         if (fireCountdown <= 0f)
@@ -61,9 +73,11 @@ public class Defender : MonoBehaviour
 
     void Shoot()
     {
+        animator.SetTrigger("Shoot");
+        muzzleParticleSystem.Play();
         GameObject bulletGO = (GameObject)Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Bullet bullet = bulletGO.GetComponent<Bullet>();
-
+        animator.SetTrigger("ShootIdle");
         if (bullet != null)
         {
             bullet.Seek(target, gunDamage);
@@ -72,13 +86,9 @@ public class Defender : MonoBehaviour
 
     void ChangeLookDirection()
     {
+        animator.SetTrigger("ShootIdle");
         direction = (target.position - transform.position).normalized;
         rotGoal = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotGoal, rotationSpeed);
-    }
-
-    private void Awake()
-    {
-        
     }
 }
