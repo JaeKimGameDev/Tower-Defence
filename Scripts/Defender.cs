@@ -91,4 +91,9 @@ public class Defender : MonoBehaviour
         rotGoal = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotGoal, rotationSpeed);
     }
+
+    public void IncreaseGunDamage(float increaseDamageBy)
+    {
+        gunDamage = gunDamage + increaseDamageBy;
+    }
 }

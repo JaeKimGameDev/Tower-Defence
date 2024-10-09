@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem.Processors;
@@ -22,6 +23,8 @@ public class EnemyFunctionality : MonoBehaviour
     private Vector3 direction;
 
     public PlayerAttributes playerAttributes;
+
+    public WaveSpawner waveSpawner;
 
     private void Awake()
     {
@@ -73,6 +76,7 @@ public class EnemyFunctionality : MonoBehaviour
     void Die()
     {
         animator.SetBool("isDead", true);
+        waveSpawner.enemies.Remove(gameObject);
         Destroy(gameObject);
     }
     public void TakeDamage(float damageAmount)

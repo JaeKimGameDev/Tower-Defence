@@ -18,6 +18,11 @@ public class BuildManager : MonoBehaviour
     public PlayerAttributes playerAttributes;
     public TextMeshProUGUI heroButtonText;
 
+    public GameObject heroMenuButton;
+    public GameObject recruitMenuButton;
+
+    public List<GameObject> SpawnedDefenders = new List<GameObject>();
+
     void Awake()
     {
         if (instance != null)
@@ -47,12 +52,12 @@ public class BuildManager : MonoBehaviour
 
     public GameObject GetHeroDefenderToBuild()
     {
-        if (playerAttributes.playerResource >= 1)
+        if (playerAttributes.playerResource >= 2)
         {
-            playerAttributes.DecrementPlayerResource(1);
+            playerAttributes.DecrementPlayerResource(2);
             int defender = Random.Range(0, allHeroDefenders.Count);
             spawnDefender = allHeroDefenders[defender];
-            DisableHero();
+
             return spawnDefender;
         }
         else
@@ -74,27 +79,21 @@ public class BuildManager : MonoBehaviour
         }
     }
 
-    public void EnableHero()
+    public void HeroButtonClicked()
     {
-        if (playerAttributes.playerResource >= 1 & buildHero == false)
+        if (buildHero == true)
         {
-            playerAttributes.DecrementPlayerResource(1);
-            buildHero = true;
-            heroButtonText.GetComponent<TextMeshProUGUI>().color = new Color32(60, 110, 34, 255);
-        }
-        else if (buildHero == true)
-        {
-            Debug.Log("you already enabled Hero to be built next");
+            heroMenuButton.SetActive(false);
+            recruitMenuButton.SetActive(true);
+            buildHero = false;
+            heroButtonText.text = "Recruits \n+1 Resources";
         }
         else
         {
-            Debug.Log("you require more resources");
+            heroMenuButton.SetActive(true);
+            recruitMenuButton.SetActive(false);
+            buildHero = true;
+            heroButtonText.text = "Heros \n+2 Resources";
         }
-    }
-
-    public void DisableHero()
-    {
-        heroButtonText.GetComponent<TextMeshProUGUI>().color = new Color32(107, 3, 73, 255);
-        buildHero = false;
     }
 }

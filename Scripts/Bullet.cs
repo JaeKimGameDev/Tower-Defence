@@ -2,27 +2,38 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private Transform target;
-    public float damage;
+    private Transform _target;
+    public float _damage;
     public float speed;
     public EnemyFunctionality enemyFunctionality;
     
-    public void Seek(Transform _target, float _damage)
+    public void Seek(Transform target, float damage)
     {
-        target = _target;
-        damage = _damage;
+        _target = target;
+        _damage = damage;
+    }
+    public float Damage
+    {
+        get
+        { 
+            return _damage;
+        }
+        set
+        {
+            _damage = value;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (target == null)
+        if (_target == null)
         {
             Destroy(gameObject);
             return;
         }
 
-        Vector3 dir = target.position - transform.position;
+        Vector3 dir = _target.position - transform.position;
         float distanceThisFrame = speed * Time.deltaTime;
 
         if (dir.magnitude <= distanceThisFrame)
@@ -35,7 +46,7 @@ public class Bullet : MonoBehaviour
 
     void HitTarget()
     {
-        DamageEnemy(target.gameObject);
+        DamageEnemy(_target.gameObject);
         Destroy(gameObject);
     }
 
@@ -44,7 +55,11 @@ public class Bullet : MonoBehaviour
         EnemyFunctionality enemyFunctionality = enemy.GetComponent<EnemyFunctionality>();
         if (enemyFunctionality != null) 
         {
-            enemyFunctionality.TakeDamage(damage);
+            enemyFunctionality.TakeDamage(_damage);
+        }
+        else
+        {
+            return;
         }
     }
 }

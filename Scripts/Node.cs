@@ -30,7 +30,8 @@ public class Node : MonoBehaviour
         {
             defenderToBuild = BuildManager.instance.GetNormalDefenderToBuild();
         }
-        defender = (GameObject)Instantiate(defenderToBuild, transform.position + positionOffset, transform.rotation);        
+        defender = (GameObject)Instantiate(defenderToBuild, transform.position + positionOffset, transform.rotation);
+        buildManager.SpawnedDefenders.Add(defender);
     }
     void OnMouseEnter()
     {
