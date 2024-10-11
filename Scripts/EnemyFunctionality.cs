@@ -3,6 +3,9 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem.Processors;
 using UnityEngine.UI;
+using DamageNumbersPro;
+using Unity.VisualScripting;
+using UnityEngine.UIElements;
 
 public class EnemyFunctionality : MonoBehaviour
 {
@@ -22,26 +25,23 @@ public class EnemyFunctionality : MonoBehaviour
     private Quaternion rotGoal;
     private Vector3 direction;
 
-    public PlayerAttributes playerAttributes;
-
+    public GameObject gameManager;
     public WaveSpawner waveSpawner;
 
     private void Awake()
     {
         maxHealth = currentHealth;
     }
-
     private void Start()
     {
+        //playerAttributes = GetComponent<PlayerAttributes>();
         wayPointTarget = Waypoints.points[0];
         animator = this.GetComponent<Animator>();
     }
-
     private void Update()
     {
         GetMoving();
         ChangeLookDirection();
-
         if (Vector3.Distance(transform.position, wayPointTarget.position) <= 0.5f)
         {
             GetNextWayPoint();
@@ -56,7 +56,7 @@ public class EnemyFunctionality : MonoBehaviour
     {
         if (wavepointIndex >= Waypoints.points.Length - 1)
         {
-            playerAttributes.PlayerLifeLost();
+            gameManager.GetComponent<PlayerAttributes>().PlayerLifeLost();
             Die();
             // implement player life or chances lost because gameobject has reached the end without dying
             //numberOfEnemies--;
@@ -78,7 +78,7 @@ public class EnemyFunctionality : MonoBehaviour
         animator.SetBool("isDead", true);
         waveSpawner.enemies.Remove(gameObject);
         Destroy(gameObject);
-    }
+    }    
     public void TakeDamage(float damageAmount)
     {
         currentHealth -= damageAmount;

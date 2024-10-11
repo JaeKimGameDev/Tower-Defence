@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class WeaponUpgradeMenuButton : MonoBehaviour
 {
-
     public GameObject heroButton;
     public GameObject weaponsButton;
     public GameObject handgunUpgradeButton;
@@ -48,6 +47,8 @@ public class WeaponUpgradeMenuButton : MonoBehaviour
     }
     public void UpgradeHandGun()
     {
+        // check if we have enough resources
+
         HandGunUpgrade.GetComponent<Defender>().IncreaseGunDamage(3f);
         HeroHandGunUpgrade.GetComponent<Defender>().IncreaseGunDamage(5f);
         foreach (GameObject defender in buildManager.SpawnedDefenders)
@@ -64,6 +65,8 @@ public class WeaponUpgradeMenuButton : MonoBehaviour
     }
     public void UpgradeAssaultRifle()
     {
+        // check if we have enough resources
+
         AssaultUpgrade.GetComponent<Defender>().IncreaseGunDamage(4f);
         HeroAssaultUpgrade.GetComponent<Defender>().IncreaseGunDamage(7f);
 
@@ -81,6 +84,8 @@ public class WeaponUpgradeMenuButton : MonoBehaviour
     }
     public void UpgradeSniperRifle()
     {
+        // check if we have enough resources
+
         SniperUpgrade.GetComponent<Defender>().IncreaseGunDamage(16f);
         HeroSniperUpgrade.GetComponent<Defender>().IncreaseGunDamage(26f);
 
