@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using DamageNumbersPro;
 using Unity.VisualScripting;
 using UnityEngine.UIElements;
+using System.Collections;
 
 public class EnemyFunctionality : MonoBehaviour
 {
@@ -34,17 +35,19 @@ public class EnemyFunctionality : MonoBehaviour
     }
     private void Start()
     {
-        //playerAttributes = GetComponent<PlayerAttributes>();
         wayPointTarget = Waypoints.points[0];
         animator = this.GetComponent<Animator>();
     }
     private void Update()
     {
-        GetMoving();
-        ChangeLookDirection();
-        if (Vector3.Distance(transform.position, wayPointTarget.position) <= 0.5f)
+        if (currentHealth > 0)
         {
-            GetNextWayPoint();
+            GetMoving();
+            ChangeLookDirection();
+            if (Vector3.Distance(transform.position, wayPointTarget.position) <= 0.5f)
+            {
+                GetNextWayPoint();
+            }
         }
     }
     public void GetMoving()
@@ -73,12 +76,17 @@ public class EnemyFunctionality : MonoBehaviour
 
         transform.rotation = Quaternion.Slerp(transform.rotation, rotGoal, rotationSpeed);
     }
-    void Die()
+    public IEnumerator DeathAnimation()
     {
-        animator.SetBool("isDead", true);
-        waveSpawner.enemies.Remove(gameObject);
+        yield return new WaitForSeconds(1);
         Destroy(gameObject);
     }    
+    void Die()
+    {
+        animator.Play("Death");
+        waveSpawner.enemies.Remove(gameObject);
+        StartCoroutine(DeathAnimation());        
+    }
     public void TakeDamage(float damageAmount)
     {
         currentHealth -= damageAmount;
@@ -86,7 +94,16 @@ public class EnemyFunctionality : MonoBehaviour
         curvedHealthBar.FillState = currentHealth/maxHealth;
         if (currentHealth <= 0)
         {
+            curvedHealthBar.FillState = 0f / maxHealth;
             Die();
         }
+    }
+    public bool IsDead()
+    {
+        if (currentHealth <= 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

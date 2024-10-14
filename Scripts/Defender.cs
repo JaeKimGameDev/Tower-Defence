@@ -1,5 +1,7 @@
 using UnityEngine;
 using static UnityEngine.InputSystem.OnScreen.OnScreenStick;
+using System.Collections;
+using System.Collections.Generic;
 
 public class Defender : MonoBehaviour
 {
@@ -25,6 +27,8 @@ public class Defender : MonoBehaviour
     public GameObject muzzleFlash;
     private ParticleSystem muzzleParticleSystem;
 
+    public WaveSpawner waveSpawner;
+
     void Start()
     {
         muzzleParticleSystem = muzzleFlash.GetComponent<ParticleSystem>();
@@ -33,7 +37,8 @@ public class Defender : MonoBehaviour
     }
     void UpdateTarget()
     {
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        List<GameObject> enemies = waveSpawner.enemies;
         frontOfEnemy = null;
         foreach (GameObject enemy in enemies)
         {
@@ -44,7 +49,7 @@ public class Defender : MonoBehaviour
                 break;
             }
         }
-        if (frontOfEnemy != null)
+        if (frontOfEnemy != null && frontOfEnemy.GetComponent<EnemyFunctionality>().IsDead() is false)
         {
             target = frontOfEnemy.transform;
         }
