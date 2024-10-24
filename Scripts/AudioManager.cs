@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
@@ -16,42 +14,41 @@ public class AudioManager : MonoBehaviour
     public GameObject masterBarrierOff;
     public GameObject musicBarrierOff;
     public GameObject effectsBarrierOff;
-
-    public AudioMixer mixer;
+    [SerializeField] private AudioMixer audioMixer;
+    public GameObject optionMenu;
 
     void Start()
     {
         CheckMaster();
     }
-
-    public void SetAudioLevel(float audioLevel)
+    public void SetMasterVolume(float level)
     {
-        mixer.SetFloat("music", Mathf.Log10(audioLevel) * 20);
-    }
-    public void ChangeMasterVolume()
-    {
-        AudioListener.volume = masterSoundSlider.value;
+        level = -80 + (.8f * level);
+        audioMixer.SetFloat("MasterVolume", level);
         PlayerPrefs.SetFloat("masterVolume", masterSoundSlider.value);
-        SetAudioLevel(masterSoundSlider.value);
     }
-    public void ChangeMusicVolume()
+    public void SetMusicVolume(float level)
     {
-        AudioListener.volume = musicSoundSlider.value;
+        level = -80 + (.8f * level);
+        audioMixer.SetFloat("MusicVolume", level);
         PlayerPrefs.SetFloat("musicVolume", musicSoundSlider.value);
     }
-    public void ChangeEffectsVolume()
+    public void SetEffectsVolume(float level)
     {
-        AudioListener.volume = effectsSoundSlider.value;
+        level = -80 + (.8f * level);
+        audioMixer.SetFloat("SoundFXVolume", level);
         PlayerPrefs.SetFloat("effectsVolume", effectsSoundSlider.value);
     }
     public void MasterVolumeOnOff()
     {
         if (masterValue == 1)
         {
+            SetMasterVolume(0);
             masterValue = 0;
         }
         else
         {
+            SetMasterVolume(PlayerPrefs.GetFloat("masterVolume"));
             masterValue = 1;
         }
         PlayerPrefs.SetInt("masterOnOff", masterValue);
@@ -61,10 +58,12 @@ public class AudioManager : MonoBehaviour
     {
         if (musicValue == 1)
         {
+            SetMusicVolume(0);
             musicValue = 0;
         }
         else
         {
+            SetMusicVolume(PlayerPrefs.GetFloat("musicVolume"));
             musicValue = 1;
         }
         PlayerPrefs.SetInt("musicOnOff", musicValue);
@@ -74,14 +73,37 @@ public class AudioManager : MonoBehaviour
     {
         if (effectsValue == 1)
         {
+            SetEffectsVolume(0);
             effectsValue = 0;
         }
         else
         {
+            SetEffectsVolume(PlayerPrefs.GetFloat("effectsVolume"));
             effectsValue = 1;
         }
         PlayerPrefs.SetInt("effectsOnOff", effectsValue);
         SetEffectsBarrier();
+    }
+    public void CheckMasterVolumeOn(int level)
+    {
+        if (level == 0)
+        {
+            SetMasterVolume(0);
+        }
+    }
+    public void CheckMusicVolumeOn(int level)
+    {
+        if (level == 0)
+        {
+            SetMusicVolume(0);
+        }
+    }
+    public void CheckEffectsVolumeOn(int level)
+    {
+        if (level == 0)
+        {
+            SetEffectsVolume(0);
+        }
     }
     public void SetMasterBarrier()
     {
@@ -142,17 +164,38 @@ public class AudioManager : MonoBehaviour
     }
     public void Load()
     {
+        optionMenu.SetActive(true);
         masterSoundSlider.value = PlayerPrefs.GetFloat("masterVolume");
         musicSoundSlider.value = PlayerPrefs.GetFloat("musicVolume");
         effectsSoundSlider.value = PlayerPrefs.GetFloat("effectsVolume");
         masterValue = PlayerPrefs.GetInt("masterOnOff");
+        CheckMasterVolumeOn(masterValue);
         musicValue = PlayerPrefs.GetInt("musicOnOff");
+        CheckMusicVolumeOn(musicValue);
         effectsValue = PlayerPrefs.GetInt("effectsOnOff");
+        CheckEffectsVolumeOn(effectsValue);
         SetMasterBarrier();
         SetMusicBarrier();
         SetEffectsBarrier();
-        //ChangeMasterVolume();
-        //ChangeMusicVolume();
-        //ChangeEffectsVolume();
+        optionMenu.SetActive(false);
     }
 }
+
+//public void ChangeMasterVolume()
+//{
+//    PlayerPrefs.SetFloat("masterVolume", masterSoundSlider.value);
+//    //SetAudioLevel(masterSoundSlider.value);
+//    // call other script and change volume
+//}
+//public void ChangeMusicVolume()
+//{
+//    PlayerPrefs.SetFloat("musicVolume", musicSoundSlider.value);
+//    //SetMusicLevel(musicSoundSlider.value);
+//    // call other script and change volume
+//}
+//public void ChangeEffectsVolume()
+//{
+//    PlayerPrefs.SetFloat("effectsVolume", effectsSoundSlider.value);
+//    //SetEffectsLevel(effectsSoundSlider.value);
+//    // call other script and change volume
+//}

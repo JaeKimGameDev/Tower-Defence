@@ -3,7 +3,17 @@ guid: a4b7fb3f4d15b604bba84f9f92e82a9d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - masterSoundSlider: {instanceID: 0}
+  - musicSoundSlider: {instanceID: 0}
+  - effectsSoundSlider: {instanceID: 0}
+  - masterBarrierOn: {instanceID: 0}
+  - musicBarrierOn: {instanceID: 0}
+  - effectsBarrierOn: {instanceID: 0}
+  - masterBarrierOff: {instanceID: 0}
+  - musicBarrierOff: {instanceID: 0}
+  - effectsBarrierOff: {instanceID: 0}
+  - mixer: {fileID: 24100000, guid: 8e4d3ee6e18cc594d9bc4fd42d82a93d, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

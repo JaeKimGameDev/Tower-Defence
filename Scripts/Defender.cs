@@ -1,6 +1,4 @@
 using UnityEngine;
-using static UnityEngine.InputSystem.OnScreen.OnScreenStick;
-using System.Collections;
 using System.Collections.Generic;
 
 public class Defender : MonoBehaviour
@@ -58,7 +56,6 @@ public class Defender : MonoBehaviour
             animator.SetTrigger("Idle");
         }
     }
-
     void FixedUpdate()
     {        
         if (target == null)
@@ -75,7 +72,6 @@ public class Defender : MonoBehaviour
         }
         fireCountdown -= Time.deltaTime;
     }
-
     void Shoot()
     {
         animator.SetTrigger("Shoot");
@@ -88,7 +84,6 @@ public class Defender : MonoBehaviour
             bullet.Seek(target, gunDamage);
         }
     }
-
     void ChangeLookDirection()
     {
         animator.SetTrigger("ShootIdle");
@@ -96,7 +91,6 @@ public class Defender : MonoBehaviour
         rotGoal = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.Slerp(transform.rotation, rotGoal, rotationSpeed);
     }
-
     public void IncreaseGunDamage(float increaseDamageBy)
     {
         gunDamage = gunDamage + increaseDamageBy;

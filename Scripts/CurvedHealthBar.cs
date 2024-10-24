@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CurvedHealthBar : MonoBehaviour
@@ -24,9 +21,7 @@ public class CurvedHealthBar : MonoBehaviour
             RecalculatePoints();
         }
     }
-
     private void OnValidate() => RecalculatePoints();
-
     private void RecalculatePoints()
     {
         float angleIncrement = 1.75f * fillState / smootherUI;

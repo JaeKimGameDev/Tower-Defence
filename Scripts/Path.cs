@@ -22,7 +22,6 @@ public class Path : MonoBehaviour
             centre + Vector2.right
         };
     }
-
     public Vector2 this[int i]
     {
         get
@@ -30,7 +29,6 @@ public class Path : MonoBehaviour
             return points[i];
         }
     }
-
     public bool AutoSetControlPoints
     {
         get
@@ -49,7 +47,6 @@ public class Path : MonoBehaviour
             }
         }
     }
-
     public int NumPoints
     {
         get
@@ -57,7 +54,6 @@ public class Path : MonoBehaviour
             return points.Count;
         }
     }
-
     public int NumSegments
     {
         get
@@ -65,7 +61,6 @@ public class Path : MonoBehaviour
             return points.Count/3;
         }
     }
-
     public void AddSegment(Vector2 anchorPos)
     {
         points.Add(points[points.Count - 1] * 2 - points[points.Count - 2]);
@@ -77,12 +72,10 @@ public class Path : MonoBehaviour
             AutoSetAllAffectedControlPoints(points.Count - 1);
         }
     }
-
     public Vector2[] GetPointsInSegment(int i)
     {
         return new Vector2[] { points[i * 3], points[i * 3 + 1], points[i * 3 + 2], points[LoopIndex(i * 3 + 3)] };
     }
-
     public void MovePoint(int i, Vector2 pos)
     {
         Vector2 deltaMove = pos - points[i];
@@ -124,7 +117,6 @@ public class Path : MonoBehaviour
             }
         }
     }
-
     public void ToggleClosed()
     {
         isClosed = !isClosed;
@@ -148,7 +140,6 @@ public class Path : MonoBehaviour
             }
         }
     }
-
     void AutoSetAllAffectedControlPoints(int updatedAnchorIndex)
     {
         for (int i = updatedAnchorIndex-3; i <= updatedAnchorIndex +3; i+=3)
@@ -161,7 +152,6 @@ public class Path : MonoBehaviour
 
         AutoSetStartAndEndControls();
     }
-
     void AutoSetAllControlPoints()
     {
         for (int i = 0; i < points.Count; i+=3)
@@ -171,7 +161,6 @@ public class Path : MonoBehaviour
 
         AutoSetStartAndEndControls();
     }
-
     void AutoSetAnchorControlPoints(int anchorIndex)
     {
         Vector2 anchorPos = points[anchorIndex];
@@ -202,7 +191,6 @@ public class Path : MonoBehaviour
             }
         }
     }
-
     void AutoSetStartAndEndControls()
     {
         if (!isClosed)
@@ -211,7 +199,6 @@ public class Path : MonoBehaviour
             points[points.Count - 2] = (points[points.Count - 1] + points[points.Count - 3]) * .5f;
         }
     }
-
     int LoopIndex(int i)
     {
         return (i + points.Count) % points.Count;
