@@ -8,11 +8,15 @@ public class GameMenuScript : MonoBehaviour
     public GameObject exitButton;
     public GameObject fadeCanvas;
     public GameObject gameOverMenu;
+    public GameObject soundMenu;
     public float speed;
 
     public void MenuButton()
     {
         menuButton.SetActive(false);
+
+        // sound menu here
+        soundMenu.SetActive(true);
         backButton.SetActive(true);
         exitButton.SetActive(true);
         fadeCanvas.SetActive(true);
@@ -21,6 +25,7 @@ public class GameMenuScript : MonoBehaviour
     public void BackButton()
     {
         menuButton.SetActive(true);
+        soundMenu.SetActive(false);
         backButton.SetActive(false);
         exitButton.SetActive(false);        
         fadeCanvas.SetActive(false);
@@ -34,6 +39,7 @@ public class GameMenuScript : MonoBehaviour
     public void ResetGame()
     {
         menuButton.SetActive(true);
+        soundMenu.SetActive(false);
         fadeCanvas.SetActive(false);
         gameOverMenu.SetActive(false);
         Time.timeScale = 1;

@@ -5,10 +5,6 @@ public class SoundFxManager : MonoBehaviour
     public static SoundFxManager instance;
     [SerializeField] private AudioSource soundFXObject;
 
-    //[SerializeField] private AudioMixerGroup musicMixerGroup;
-    //[SerializeField] private AudioMixerGroup soundEffectsMixerGroup;
-    //[SerializeField] private Sound sounds;
-
     public void Awake()
     {
         if (instance == null)

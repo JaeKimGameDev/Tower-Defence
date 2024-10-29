@@ -11,7 +11,7 @@ public class WaveSpawner : MonoBehaviour
     public List<GameObject> enemies = new List<GameObject>();
     public int waveLevel=0;
     public Transform spawnPoint;
-    private float timeBetweenEnemies = 2.5f;
+    [SerializeField] private float timeBetweenEnemies = 2.5f;
     private float timeBetweenWaves = 75f;
     private float countdown = 15f;
     [SerializeField]

@@ -14,7 +14,7 @@ public class EnemyFunctionality : MonoBehaviour
     // Moving from point to point
     public Transform wayPointTarget;
     private int wavepointIndex = 0;
-    private float rotationSpeed = 0.05f;
+    private float rotationSpeed = 0.2f;
     private Animator animator;
     private Quaternion rotGoal;
     private Vector3 direction;
