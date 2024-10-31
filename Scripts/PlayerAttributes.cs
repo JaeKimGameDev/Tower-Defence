@@ -5,14 +5,16 @@ public class PlayerAttributes : MonoBehaviour
 {
     public TextMeshProUGUI playerResourceText;
     public TextMeshProUGUI playerLifeText;
-    public int playerResource = 6;
+    public int playerResource = 2;
     public int playerLife = 25;
     public GameObject gameMenu;
+    public int enemiesKilled = 0;
 
     void Start()
     {
         playerResourceText.text = playerResource.ToString();
         playerLifeText.text = playerLife.ToString();
+        enemiesKilled = 0;
     }
     public void IncrementPlayerResource(int resourceAmount)
     {
@@ -32,5 +34,9 @@ public class PlayerAttributes : MonoBehaviour
         {
             gameMenu.GetComponent<GameMenuScript>().GameOver();
         }
+    }
+    public int GetResource()
+    {
+        return playerResource;
     }
 }

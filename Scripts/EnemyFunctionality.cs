@@ -19,8 +19,11 @@ public class EnemyFunctionality : MonoBehaviour
     private Quaternion rotGoal;
     private Vector3 direction;
 
-    public GameObject gameManager;
+    [SerializeField] private GameObject gameManager;
     public WaveSpawner waveSpawner;
+    private int enemyDied = 0;
+
+    [SerializeField] private PlayerAttributes playerAttributes;
 
     private void Awake()
     {
@@ -50,12 +53,15 @@ public class EnemyFunctionality : MonoBehaviour
     }
     void GetNextWayPoint()
     {
-        if (wavepointIndex >= Waypoints.points.Length - 1)
+        if (wavepointIndex >= Waypoints.points.Length - 1 && enemyDied == 0)
         {
+            enemyDied = 1;
             gameManager.GetComponent<PlayerAttributes>().PlayerLifeLost();
-            Die();
-            // implement player life or chances lost because gameobject has reached the end without dying
-            //numberOfEnemies--;
+            EndReached();
+            return;
+        }
+        else if (enemyDied == 1)
+        {
             return;
         }
         wavepointIndex++;
@@ -78,7 +84,12 @@ public class EnemyFunctionality : MonoBehaviour
     {
         animator.Play("Death");
         waveSpawner.enemies.Remove(gameObject);
-        StartCoroutine(DeathAnimation());        
+        StartCoroutine(DeathAnimation());
+    }
+    void EndReached()
+    {
+        waveSpawner.enemies.Remove(gameObject);
+        Destroy(gameObject);
     }
     public void TakeDamage(float damageAmount)
     {
@@ -88,6 +99,7 @@ public class EnemyFunctionality : MonoBehaviour
         if (currentHealth <= 0)
         {
             curvedHealthBar.FillState = 0f / maxHealth;
+            playerAttributes.GetComponent<PlayerAttributes>().enemiesKilled++;
             Die();
         }
     }
@@ -97,6 +109,10 @@ public class EnemyFunctionality : MonoBehaviour
         {
             return true;
         }
-        return false;
+        else
+        {
+            return false;
+        }
+        //return false;
     }
 }

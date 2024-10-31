@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public class WeaponUpgradeMenuButton : MonoBehaviour
@@ -19,83 +20,79 @@ public class WeaponUpgradeMenuButton : MonoBehaviour
     public GameObject manager;
     public BuildManager buildManager;
 
+    public int weaponUpgradeCost;
+    public PlayerAttributes playerAttributes;
+    public TextMeshProUGUI upgradeWeaponText;
+
     private void Start()
     {
+        upgradeWeaponText.text = "Upgrade Weapons\n" + weaponUpgradeCost.ToString() + " Resource";
         buildManager = manager.GetComponent<BuildManager>();
-    }
-
-    public void UpgradeWeapons()
-    {
-        heroButton.SetActive(false);
-        weaponsButton.SetActive(false);
-        handgunUpgradeButton.SetActive(true);
-        assaultRifleUpgradeButton.SetActive(true);
-        sniperRifleUpgradeButton.SetActive(true);
-        backButton.SetActive(true);
-    }
-    public void BackFromWeapons()
-    {
-        heroButton.SetActive(true);
-        weaponsButton.SetActive(true);
-        handgunUpgradeButton.SetActive(false);
-        assaultRifleUpgradeButton.SetActive(false);
-        sniperRifleUpgradeButton.SetActive(false);
-        backButton.SetActive(false);
     }
     public void UpgradeHandGun()
     {
-        // check if we have enough resources
-
-        HandGunUpgrade.GetComponent<Defender>().IncreaseGunDamage(3f);
-        HeroHandGunUpgrade.GetComponent<Defender>().IncreaseGunDamage(5f);
+        HandGunUpgrade.GetComponent<Defender>().IncreaseGunDamage(1f);
+        HeroHandGunUpgrade.GetComponent<Defender>().IncreaseGunDamage(2f);
         foreach (GameObject defender in buildManager.SpawnedDefenders)
         {
             if (defender.tag == "HGDefender")
             {
-                defender.GetComponent<Defender>().IncreaseGunDamage(3f);
+                defender.GetComponent<Defender>().IncreaseGunDamage(1f);
             }
             else if (defender.tag == "HGHeroDefender")
             {
-                defender.GetComponent<Defender>().IncreaseGunDamage(5f);
+                defender.GetComponent<Defender>().IncreaseGunDamage(2f);
             }
         }
     }
     public void UpgradeAssaultRifle()
     {
-        // check if we have enough resources
-
-        AssaultUpgrade.GetComponent<Defender>().IncreaseGunDamage(4f);
-        HeroAssaultUpgrade.GetComponent<Defender>().IncreaseGunDamage(7f);
+        AssaultUpgrade.GetComponent<Defender>().IncreaseGunDamage(2f);
+        HeroAssaultUpgrade.GetComponent<Defender>().IncreaseGunDamage(3f);
 
         foreach (GameObject defender in buildManager.SpawnedDefenders)
         {
             if (defender.tag == "ARDefender")
             {
-                defender.GetComponent<Defender>().IncreaseGunDamage(4f);
+                defender.GetComponent<Defender>().IncreaseGunDamage(2f);
             }
             else if (defender.tag == "ARHeroDefender")
             {
-                defender.GetComponent<Defender>().IncreaseGunDamage(7f);
+                defender.GetComponent<Defender>().IncreaseGunDamage(3f);
             }
         }
     }
     public void UpgradeSniperRifle()
     {
-        // check if we have enough resources
-
-        SniperUpgrade.GetComponent<Defender>().IncreaseGunDamage(16f);
-        HeroSniperUpgrade.GetComponent<Defender>().IncreaseGunDamage(26f);
+        SniperUpgrade.GetComponent<Defender>().IncreaseGunDamage(2f);
+        HeroSniperUpgrade.GetComponent<Defender>().IncreaseGunDamage(3f);
 
         foreach (GameObject defender in buildManager.SpawnedDefenders)
         {
             if (defender.tag == "SGDefender")
             {
-                defender.GetComponent<Defender>().IncreaseGunDamage(16f);
+                defender.GetComponent<Defender>().IncreaseGunDamage(2f);
             }
             else if (defender.tag == "SGHeroDefender")
             {
-                defender.GetComponent<Defender>().IncreaseGunDamage(26f);
+                defender.GetComponent<Defender>().IncreaseGunDamage(3f);
             }
+        }
+    }
+    public void CheckResourcesForUpgradeWeapon()
+    {
+        if (playerAttributes.GetComponent<PlayerAttributes>().playerResource >= weaponUpgradeCost)
+        {
+            playerAttributes.DecrementPlayerResource(weaponUpgradeCost);
+            weaponUpgradeCost++;
+            upgradeWeaponText.text = "Upgrade Weapons\n" + weaponUpgradeCost.ToString() + " Resource";
+            UpgradeHandGun();
+            UpgradeAssaultRifle();
+            UpgradeSniperRifle();
+        }
+        else
+        {
+            Debug.Log("Require more resources");
         }
     }
 }

@@ -35,7 +35,6 @@ public class Defender : MonoBehaviour
     }
     void UpdateTarget()
     {
-        //GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
         List<GameObject> enemies = waveSpawner.enemies;
         frontOfEnemy = null;
         foreach (GameObject enemy in enemies)
@@ -47,7 +46,7 @@ public class Defender : MonoBehaviour
                 break;
             }
         }
-        if (frontOfEnemy != null && frontOfEnemy.GetComponent<EnemyFunctionality>().IsDead() is false)
+        if (frontOfEnemy != null && frontOfEnemy.GetComponent<EnemyFunctionality>().IsDead() == false)
         {
             target = frontOfEnemy.transform;
         }
