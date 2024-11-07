@@ -16,11 +16,12 @@ public class WaveSpawner : MonoBehaviour
     private float countdown = 15f;
     [SerializeField]
     private int spawnNumOfEnemies = 30;
-    private WaveSpawner waveSpawner;
 
     public TextMeshProUGUI waveCountdownText;
     public Button forceSpawn;
     public TextMeshProUGUI forceSpawnText;
+
+    [SerializeField] private PlayerAttributes playerAttributes;
 
     void Update()
     {
@@ -49,10 +50,26 @@ public class WaveSpawner : MonoBehaviour
             SpawnEnemy();
             yield return new WaitForSeconds(timeBetweenEnemies);
         }
+        // waves ended, reward player
         forceSpawn.interactable = true;
         forceSpawnText.GetComponent<TextMeshProUGUI>().color = new Color32(255, 255, 255, 255);
         countdown = timeBetweenWaves;
         waveLevel++;
+        int rand1 = Random.Range(0, 11);
+        int resourceUp = 1;
+        if (rand1 <= 7)
+        {
+            resourceUp = 1;
+        }
+        else if (rand1 <= 9)
+        {
+            resourceUp = 2;
+        }
+        else
+        {
+            resourceUp = 3;
+        }
+        playerAttributes.GetComponent<PlayerAttributes>().IncrementPlayerResource(resourceUp);
     }
     void SpawnEnemy()
     {

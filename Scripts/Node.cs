@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class Node : MonoBehaviour
 {
@@ -12,37 +13,45 @@ public class Node : MonoBehaviour
 
     void OnMouseDown()
     {
-        if (defender != null)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            Debug.Log("Can't build there! - TODO display on screen");
-            // or play an audio saying "I can't build there"
-            return;
+            if (defender != null)
+            {
+                Debug.Log("Can't build there! - TODO display on screen");
+                // or play an audio saying "I can't build there"
+                return;
+            }
+            buildManager = buildManager.GetComponent<BuildManager>();
+            if (buildManager.BuildID() == true)
+            {
+                defenderToBuild = BuildManager.instance.GetHeroDefenderToBuild();
+            }
+            else
+            {
+                defenderToBuild = BuildManager.instance.GetNormalDefenderToBuild();
+            }
+            defender = (GameObject)Instantiate(defenderToBuild, transform.position + positionOffset, transform.rotation);
+            buildManager.SpawnedDefenders.Add(defender);
         }
-        buildManager = buildManager.GetComponent<BuildManager>();
-        if (buildManager.BuildID() == true)
-        {
-            defenderToBuild = BuildManager.instance.GetHeroDefenderToBuild();
-        }
-        else
-        {
-            defenderToBuild = BuildManager.instance.GetNormalDefenderToBuild();
-        }
-        defender = (GameObject)Instantiate(defenderToBuild, transform.position + positionOffset, transform.rotation);
-        buildManager.SpawnedDefenders.Add(defender);
+
     }
     void OnMouseEnter()
     {
-        if (defender == null)
+        if (!EventSystem.current.IsPointerOverGameObject())
         {
-            GetComponent<MeshRenderer>().material = greenMaterial;
+            if (defender == null)
+            {
+                GetComponent<MeshRenderer>().material = greenMaterial;
+            }
+            else
+            {
+                GetComponent<MeshRenderer>().material = redMaterial;
+            }
         }
-        else
-        {
-            GetComponent<MeshRenderer>().material = redMaterial;
-        }
+
     }
     private void OnMouseExit()
     {
-        GetComponent<MeshRenderer>().material = defaultMaterial;
+        GetComponent<MeshRenderer>().material = defaultMaterial;           
     }
 }

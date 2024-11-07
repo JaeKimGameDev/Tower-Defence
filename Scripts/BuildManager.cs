@@ -19,6 +19,8 @@ public class BuildManager : MonoBehaviour
 
     public List<GameObject> SpawnedDefenders = new List<GameObject>();
 
+    private int defender;
+
     void Awake()
     {
         if (instance != null)
@@ -28,13 +30,29 @@ public class BuildManager : MonoBehaviour
         }
         instance = this;
     }
-    
     public GameObject GetNormalDefenderToBuild()
     {
         if (playerAttributes.playerResource >= 1)
         {
             playerAttributes.DecrementPlayerResource(1);
-            int defender = Random.Range(0, allNormalDefenders.Count);
+            int defenderNumber = Random.Range(0, 11);
+
+            if (defenderNumber <= 6)
+            {
+                defender = 0;
+            }
+            else if (defenderNumber <= 8)
+            {
+                defender = 1;
+            }
+            else if (defenderNumber <= 9)
+            {
+                defender = 2;
+            }
+            else
+            {
+                defender = 3;
+            }
             spawnDefender = allNormalDefenders[defender];
 
             return spawnDefender;
@@ -45,13 +63,29 @@ public class BuildManager : MonoBehaviour
             return null;
         }
     }
-
     public GameObject GetHeroDefenderToBuild()
     {
         if (playerAttributes.playerResource >= 2)
         {
             playerAttributes.DecrementPlayerResource(2);
-            int defender = Random.Range(0, allHeroDefenders.Count);
+            int defenderNumber = Random.Range(0, 11);
+
+            if (defenderNumber <= 7)
+            {
+                defender = 0;
+            }
+            else if (defenderNumber <= 8)
+            {
+                defender = 1;
+            }
+            else if (defenderNumber <= 9)
+            {
+                defender = 3;
+            }
+            else
+            {
+                defender = 2;
+            }
             spawnDefender = allHeroDefenders[defender];
 
             return spawnDefender;
@@ -62,7 +96,6 @@ public class BuildManager : MonoBehaviour
             return null;
         }
     }
-
     public bool BuildID()
     {
         if (buildHero == true)
@@ -74,7 +107,6 @@ public class BuildManager : MonoBehaviour
             return false;
         }
     }
-
     public void HeroButtonClicked()
     {
         if (buildHero == true)

@@ -24,6 +24,7 @@ public class EnemyFunctionality : MonoBehaviour
     private int enemyDied = 0;
 
     [SerializeField] private PlayerAttributes playerAttributes;
+    private int deadAlready = 0;
 
     private void Awake()
     {
@@ -95,13 +96,15 @@ public class EnemyFunctionality : MonoBehaviour
     {
         currentHealth -= damageAmount;
         curvedHealthBar = GetComponentInChildren<CurvedHealthBar>();
-        curvedHealthBar.FillState = currentHealth/maxHealth;
-        if (currentHealth <= 0)
+        if (currentHealth <= 0 && deadAlready == 0)
         {
-            curvedHealthBar.FillState = 0f / maxHealth;
-            playerAttributes.GetComponent<PlayerAttributes>().enemiesKilled++;
+            currentHealth = 0f;
+            deadAlready = 1;
+            curvedHealthBar.FillState = currentHealth / maxHealth;
+            playerAttributes.GetComponent<PlayerAttributes>().IncrementEliminations();
             Die();
         }
+        curvedHealthBar.FillState = currentHealth / maxHealth;
     }
     public bool IsDead()
     {
@@ -113,6 +116,5 @@ public class EnemyFunctionality : MonoBehaviour
         {
             return false;
         }
-        //return false;
     }
 }

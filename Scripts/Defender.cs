@@ -6,7 +6,8 @@ public class Defender : MonoBehaviour
     private Transform target;
     private Quaternion rotGoal;
     private Vector3 direction;
-    private float rotationSpeed = 0.75f;
+    private float rotationSpeed = .1f;
+    //private float rotationSpeed = 0.75f;
 
     [Header("Attributes")]
     public float range;
@@ -18,7 +19,7 @@ public class Defender : MonoBehaviour
 
     public GameObject bulletPrefab;
     public Transform firePoint;
-    public GameObject frontOfEnemy;
+    private GameObject frontOfEnemy;
     public float enemyDistance;
 
     private Animator animator;
@@ -31,7 +32,9 @@ public class Defender : MonoBehaviour
     {
         muzzleParticleSystem = muzzleFlash.GetComponent<ParticleSystem>();
         animator = GetComponent<Animator>();
-        InvokeRepeating("UpdateTarget", 0f, 0.5f);
+        animator.SetTrigger("Idle");
+        InvokeRepeating("UpdateTarget", 0f, 0.1f);
+        fireCountdown = 0.25f;
     }
     void UpdateTarget()
     {
@@ -50,26 +53,24 @@ public class Defender : MonoBehaviour
         {
             target = frontOfEnemy.transform;
         }
-        else
-        {
-            animator.SetTrigger("Idle");
-        }
     }
     void FixedUpdate()
-    {        
+    {
+        fireCountdown -= Time.deltaTime;
         if (target == null)
         {
+            animator.SetTrigger("Idle");
             return;
         }
-        animator.SetTrigger("ShootIdle");
-        ChangeLookDirection();
-
-        if (fireCountdown <= 0f)
+        else
         {
-            Shoot();
-            fireCountdown = 1f / fireRate;
-        }
-        fireCountdown -= Time.deltaTime;
+            ChangeLookDirection();
+            if (fireCountdown <= 0f)
+            {
+                Shoot();
+                fireCountdown = 1f / fireRate;
+            }            
+        }        
     }
     void Shoot()
     {
@@ -93,5 +94,11 @@ public class Defender : MonoBehaviour
     public void IncreaseGunDamage(float increaseDamageBy)
     {
         gunDamage = gunDamage + increaseDamageBy;
+    }    
+    void OnDrawGizmosSelected()
+    {
+        // Display the explosion radius when selected
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, range);
     }
 }
