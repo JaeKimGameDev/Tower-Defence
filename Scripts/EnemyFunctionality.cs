@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor;
 
 public class EnemyFunctionality : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class EnemyFunctionality : MonoBehaviour
 
     [SerializeField] private PlayerAttributes playerAttributes;
     private int deadAlready = 0;
+    [SerializeField] private float armor;
 
     private void Awake()
     {
@@ -92,8 +94,19 @@ public class EnemyFunctionality : MonoBehaviour
         waveSpawner.enemies.Remove(gameObject);
         Destroy(gameObject);
     }
+    public float EnemyDefense(float damageTaken)
+    {
+        damageTaken = damageTaken - armor;
+        if (damageTaken <= 0)
+        {
+            damageTaken = 1;
+        }
+
+        return damageTaken;
+    }
     public void TakeDamage(float damageAmount)
     {
+        damageAmount = EnemyDefense(damageAmount);
         currentHealth -= damageAmount;
         curvedHealthBar = GetComponentInChildren<CurvedHealthBar>();
         if (currentHealth <= 0 && deadAlready == 0)

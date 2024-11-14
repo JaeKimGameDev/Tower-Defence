@@ -53,6 +53,10 @@ public class Defender : MonoBehaviour
         {
             target = frontOfEnemy.transform;
         }
+        else
+        {
+            target = null;
+        }
     }
     void FixedUpdate()
     {

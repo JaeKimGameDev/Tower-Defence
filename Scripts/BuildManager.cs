@@ -21,6 +21,9 @@ public class BuildManager : MonoBehaviour
 
     private int defender;
 
+    public bool testMode;
+    [SerializeField] private int defenderTest;
+
     void Awake()
     {
         if (instance != null)
@@ -35,23 +38,35 @@ public class BuildManager : MonoBehaviour
         if (playerAttributes.playerResource >= 1)
         {
             playerAttributes.DecrementPlayerResource(1);
-            int defenderNumber = Random.Range(0, 11);
-
-            if (defenderNumber <= 6)
+            int defenderNumber = Random.Range(0, 20);
+            int resourceBonus = Random.Range(0, 25);
+            if (resourceBonus == 24)
+            {
+                playerAttributes.IncrementPlayerResource(2);
+            }
+            else if (resourceBonus > 21)
+            {
+                playerAttributes.IncrementPlayerResource(1);
+            }
+            if (defenderNumber <= 15)
             {
                 defender = 0;
             }
-            else if (defenderNumber <= 8)
+            else if (defenderNumber <= 17)
             {
                 defender = 1;
             }
-            else if (defenderNumber <= 9)
+            else if (defenderNumber <= 18)
             {
                 defender = 2;
             }
             else
             {
                 defender = 3;
+            }
+            if (testMode is true)
+            {
+                defender = defenderTest;
             }
             spawnDefender = allNormalDefenders[defender];
 
@@ -68,23 +83,35 @@ public class BuildManager : MonoBehaviour
         if (playerAttributes.playerResource >= 2)
         {
             playerAttributes.DecrementPlayerResource(2);
-            int defenderNumber = Random.Range(0, 11);
-
-            if (defenderNumber <= 7)
+            int defenderNumber = Random.Range(0, 20);
+            int resourceBonus = Random.Range(0, 50);
+            if (resourceBonus == 49)
+            {
+                playerAttributes.IncrementPlayerResource(2);
+            }
+            else if (resourceBonus > 46)
+            {
+                playerAttributes.IncrementPlayerResource(1);
+            }
+            if (defenderNumber <= 15)
             {
                 defender = 0;
             }
-            else if (defenderNumber <= 8)
+            else if (defenderNumber <= 17)
             {
                 defender = 1;
             }
-            else if (defenderNumber <= 9)
+            else if (defenderNumber <= 18)
             {
                 defender = 3;
             }
             else
             {
                 defender = 2;
+            }
+            if (testMode is true)
+            {
+                defender = defenderTest;
             }
             spawnDefender = allHeroDefenders[defender];
 
@@ -114,14 +141,14 @@ public class BuildManager : MonoBehaviour
             heroMenuButton.SetActive(false);
             recruitMenuButton.SetActive(true);
             buildHero = false;
-            heroButtonText.text = "Recruits \n+1 Resources";
+            heroButtonText.text = "Special Forces\n+1 Resources";
         }
         else
         {
             heroMenuButton.SetActive(true);
             recruitMenuButton.SetActive(false);
             buildHero = true;
-            heroButtonText.text = "Heros \n+2 Resources";
+            heroButtonText.text = "Heros\n+2 Resources";
         }
     }
 }

@@ -55,13 +55,13 @@ public class WaveSpawner : MonoBehaviour
         forceSpawnText.GetComponent<TextMeshProUGUI>().color = new Color32(255, 255, 255, 255);
         countdown = timeBetweenWaves;
         waveLevel++;
-        int rand1 = Random.Range(0, 11);
+        int rand1 = Random.Range(0, 20);
         int resourceUp = 1;
-        if (rand1 <= 7)
+        if (rand1 <= 16)
         {
             resourceUp = 1;
         }
-        else if (rand1 <= 9)
+        else if (rand1 <= 18)
         {
             resourceUp = 2;
         }

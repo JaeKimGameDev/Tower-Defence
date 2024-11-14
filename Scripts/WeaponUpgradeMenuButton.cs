@@ -37,11 +37,11 @@ public class WeaponUpgradeMenuButton : MonoBehaviour
         HeroHandGunUpgrade.GetComponent<Defender>().IncreaseGunDamage(heroHandGunUpgrade);
         foreach (GameObject defender in buildManager.SpawnedDefenders)
         {
-            if (defender.tag == "HGDefender")
+            if (defender.tag == "HandgunSpecial")
             {
                 defender.GetComponent<Defender>().IncreaseGunDamage(normalHandGunUpgrade);
             }
-            else if (defender.tag == "HGHeroDefender")
+            else if (defender.tag == "HandgunHero")
             {
                 defender.GetComponent<Defender>().IncreaseGunDamage(heroHandGunUpgrade);
             }
@@ -54,11 +54,11 @@ public class WeaponUpgradeMenuButton : MonoBehaviour
 
         foreach (GameObject defender in buildManager.SpawnedDefenders)
         {
-            if (defender.tag == "ARDefender")
+            if (defender.tag == "AssaultSpecial")
             {
                 defender.GetComponent<Defender>().IncreaseGunDamage(normalAssaultUpgrade);
             }
-            else if (defender.tag == "ARHeroDefender")
+            else if (defender.tag == "AssaultHero")
             {
                 defender.GetComponent<Defender>().IncreaseGunDamage(HeroHandAssaultUpgrade);
             }
@@ -71,11 +71,11 @@ public class WeaponUpgradeMenuButton : MonoBehaviour
 
         foreach (GameObject defender in buildManager.SpawnedDefenders)
         {
-            if (defender.tag == "SGDefender")
+            if (defender.tag == "SniperSpecial")
             {
                 defender.GetComponent<Defender>().IncreaseGunDamage(normalSniperUpgrade);
             }
-            else if (defender.tag == "SGHeroDefender")
+            else if (defender.tag == "SniperHero")
             {
                 defender.GetComponent<Defender>().IncreaseGunDamage(heroSniperUpgrade);
             }
@@ -88,11 +88,11 @@ public class WeaponUpgradeMenuButton : MonoBehaviour
 
         foreach (GameObject defender in buildManager.SpawnedDefenders)
         {
-            if (defender.tag == "ShotGunDefender")
+            if (defender.tag == "ShotgunSpecial")
             {
                 defender.GetComponent<Defender>().IncreaseGunDamage(normalShotgunUpgrade);
             }
-            else if (defender.tag == "ShotGunHeroDefender")
+            else if (defender.tag == "ShotgunHero")
             {
                 defender.GetComponent<Defender>().IncreaseGunDamage(heroShotgunUpgrade);
             }
